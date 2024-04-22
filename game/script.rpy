@@ -4,7 +4,7 @@
 # name of the character.
 
 define t = Character("Toaster")
-
+define c = Character("Connor")
 
 # The game starts here.
 
@@ -20,6 +20,7 @@ label start:
     # replace it by adding a file named "eileen happy.png" to the images
     # directory.
 
+    play music "wake_up.mp3"
 
     # These display lines of dialogue.
 
@@ -34,6 +35,14 @@ label start:
     show toaster expectant small at truecenter
 
     t "When would you want to take a bath together? Pwease pweasee"
+
+    hide toaster expectant small
+
+    play music "connor_theme.mp3"
+
+    show connor scary at truecenter
+
+    c "IT WAS ME CONNOR, ALL ALONG"
 
     # This ends the game.
 
