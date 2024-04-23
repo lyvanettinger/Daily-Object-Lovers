@@ -1,19 +1,18 @@
-﻿# The script of the game goes in this file.
+﻿# Game script
 
-# Declare characters used by this game. The color argument colorizes the
-# name of the character.
-
-define mc = Character("MC-Chan")
-
+# -- Characters --
+define mc = Character("[mcname] [mclastname]")
+# Love interests
 define drmt = Character("Doormat")
 define door = Character("Door")
 define toaster = Character("Toaster")
+# Side characters
+define connor = Character("Connor")
 
 
-define c = Character("Connor")
-
+# Custom transforms
 transform half_size: 
-    zoom 0.5 #adjust as required
+    zoom 0.5 # adjust as required
 
 transform double_size:
     zoom 2.0
@@ -22,11 +21,29 @@ transform left_center:
     xalign 0.15
     yalign 0.5
 
-# The game starts here.
 
+# Custom transitions
+define moveinoutdissolve = ComposeTransition(dissolve, before=moveoutleft, after=moveinright)
+
+
+# The game starts here.
 label start:
+    # Get player's first and last name
+    python:
+        mcname = renpy.input("Hey hey, not so fast. What's your first name?", length=16)
+        mcname = mcname.strip()
+        mclastname = renpy.input("And.... your last name?", length=16)
+        mclastname = mclastname.strip()
+
+        if not mcname:
+            mcname = "Joe"
+        if not mclastname:
+            mclastname = "Shro"
+
+    mc "{i}Yawning, I stretched and got out of bed. \"What a wonderful day\" I thought to myself. Surely, nothing will go wrong...{/i}"
 
     scene bg hall
+    with fade
 
     play music "wake_up.mp3"
 
@@ -39,30 +56,23 @@ label start:
     mc "I'll never forget those bloody screams of the stairs..."
 
     show alice default
+
     mc "I am a bit hungry though, might aswell head into the kitchen"
-
     mc "I think it was behind that door..."
-
 
     show doormat worried at left_center 
 
-    
     drmt "...Miss"
     
     show alice worried
 
-    mc "!!!"
+    mc "!!!" with vpunch
 
     show doormat sad
 
     drmt "You are standing on my face!"
-
-
     mc "OH"
-
     mc "SORRY!!!"
-
-    
     mc "I'll be out of here quickly!"
 
     hide doormat
@@ -70,18 +80,14 @@ label start:
 
     mc "I try to open the door, but as I grab the handle"
 
-
-
     show door default at left_center
 
-    # Show door
     door "...Miss"
 
     show alice worried
+    with hpunch
 
     mc "Oh no, what now"
-
-
     door "Could you perhaps..."
 
     show alice default
@@ -91,7 +97,6 @@ label start:
     show door angry
 
     door "Not touch my..."
-
     mc "Your what?"
 
     show door pout
@@ -105,40 +110,58 @@ label start:
     show alice worried
 
     mc "OH"
-
     mc "I'M SORRY"
 
     show door blush
 
     door "As long as you're gentle..."
-
     mc "NO, I'M GETTING OUT OF HERE"
 
     hide door
+
     scene bg kitchen
-    show alice doubt at half_size, right
+    with dissolve
+    show alice doubt at half_size, right 
+    with moveinoutdissolve
 
     mc "After some 'struggles', I finally have made it into the kitchen"
 
     show alice happy
 
-    mc "I get some bread and gently stuff it in the toaster"
+    # Show choice menu
+    menu:
+        mc "I decide to..."
 
+        "Talk to the toaster":
+            call connor
+
+        "Stuff bread in the toaster":
+            call toaster
+
+    show alice embarrassed
+    mc "That scared the shit out of me...."
+
+    # End the game here
+    return
+
+label toaster:
+    # decide to stuff bread
+
+    mc "I get some bread and gently stuff it in the toaster"
     mc "..."
 
     show toaster happy small at left_center
 
-    toaster "MC-SAMA!!!"
+    toaster "[mcname]-SAMA!!!"
 
     show alice worried
 
     mc "..."
-
     mc "Oh not AGAIN!"
 
     show toaster expectant small
 
-    toaster "MC-sama! Why do you keep stuffing me with bread??"
+    toaster "[mcname]-sama! Why do you keep stuffing me with bread??"
     
     show alice doubt
 
@@ -147,7 +170,6 @@ label start:
     show toaster happy small
 
     toaster "when we could be having a bath together instead? 0w0"
-
     mc "..."
 
     show toaster sad small
@@ -157,7 +179,6 @@ label start:
     show alice worried
 
     mc "..."
-
     toaster "Please don't hate me senpai!! TwT"
 
     show alice doubt
@@ -167,7 +188,6 @@ label start:
     show toaster happy small
 
     toaster "Please! UwU"
-
     toaster "Have some toast!! Maybe you will change your mind! TwT"
 
     show alice worried
@@ -178,37 +198,29 @@ label start:
     hide toaster
 
     mc "I slowly walk away from the toaster, hearing it cry softer and softer"
-
     toaster "Sob sob, uuuuuu"
 
-    # End the game here
+    # return to original label
     return
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
 
-    scene bg kitchen
+label connor:
+    # decide to talk to toaster (delulu)
 
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-
-    play music "wake_up.mp3"
-
-    # These display lines of dialogue.
+    mc "{i}What if everything in my house can talk?? I'll try it on my toaster...{/i}"
+    mc "Toaster-kun?"
 
     show toaster happy small at truecenter
 
-    t "MC-chan!"
+    toaster "[mcname]-chan!"
 
     show toaster sad small at truecenter
 
-    t "You've finally come to play the game~ You took way too long T~T"
+    toaster "You've finally come to say hi to me~ You took way too long T~T"
 
     show toaster expectant small at truecenter
 
-    t "When would you want to take a bath together? Pwease pweasee"
+    toaster "When would you want to take a bath together? Pwease pweasee"
 
     hide toaster expectant small
 
@@ -216,8 +228,10 @@ label start:
 
     show connor scary at truecenter
 
-    c "IT WAS ME CONNOR, ALL ALONG"
+    connor "IT WAS ME CONNOR, ALL ALONG"
 
-    # This ends the game.
+    hide connor scary
+    with moveouttop
 
+    # return to original label
     return
