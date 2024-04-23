@@ -24,7 +24,7 @@ transform left_center:
 
 # Custom transitions
 define moveinoutdissolve = ComposeTransition(dissolve, before=moveoutleft, after=moveinright)
-
+define fadehold = Fade(0.5, 1.0, 0.5)
 
 # The game starts here.
 label start:
@@ -139,6 +139,9 @@ label start:
         "Stuff bread in the toaster":
             call toaster
 
+        "Turn around and leave":
+            call passout
+
     show alice embarrassed
     mc "That scared the shit out of me...."
 
@@ -236,3 +239,47 @@ label connor:
 
     # return to original label
     return
+
+
+label passout:
+    show alice doubt
+
+    mc "Ain't no way this is real.. I'm out"
+
+    hide alice doubt
+    with moveoutright
+
+    mc "{i}I turned around abruptly and left the kitchen, but to my surprise...{/i}"
+
+    "..." with hpunch
+
+    show doormat sad at left_center
+    show alice worried at half_size, right
+
+    play sound "arrr.wav"
+
+    drmt "OOUUCCHHH!!"
+
+    play sound "arrr.wav"
+
+    mc "AAAAAAAAAHHH!!"
+
+    hide doormat sad
+    hide alice worried
+    stop music
+    play music "Dreaming.mp3" noloop
+
+    pause 1.0
+
+    scene bg forest
+    with fadehold
+
+    play music "mysterious-forest.mp3" fadein 1.0 loop
+
+    "..." with hpunch
+
+    mc "agh..."
+
+    show alice doubt at half_size, right with moveinright
+
+    mc "What is this place..."
