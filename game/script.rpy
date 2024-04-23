@@ -28,6 +28,7 @@ define moveinoutdissolve = ComposeTransition(dissolve, before=moveoutleft, after
 
 # The game starts here.
 label start:
+    stop music fadeout 1.0
     # Get player's first and last name
     python:
         mcname = renpy.input("Hey hey, not so fast. What's your first name?", length=16)
