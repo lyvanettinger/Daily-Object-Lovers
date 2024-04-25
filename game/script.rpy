@@ -26,6 +26,13 @@ transform left_center:
 define moveinoutdissolve = ComposeTransition(dissolve, before=moveoutleft, after=moveinright)
 define fadehold = Fade(0.5, 1.0, 0.5)
 
+
+init python:
+    # choose random splash image on startup. splash images need to be names "splash[id]", with the following function adjusted accordingly:
+    rand = renpy.random.randint(0, 2)
+    renpy.image('splash', 'splashes/splash%d.jpg' % rand)
+
+
 # The game starts here.
 label start:
     stop music fadeout 1.0
@@ -204,9 +211,6 @@ label toaster:
     mc "I slowly walk away from the toaster, hearing it cry softer and softer"
     toaster "Sob sob, uuuuuu"
 
-    # return to original label
-    return
-
 
 label connor:
     # decide to talk to toaster (delulu)
@@ -237,11 +241,9 @@ label connor:
     hide connor scary
     with moveouttop
 
-    # return to original label
-    return
-
 
 label passout:
+    # decide to leave
     show alice doubt
 
     mc "Ain't no way this is real.. I'm out"
@@ -283,3 +285,20 @@ label passout:
     show alice doubt at half_size, right with moveinright
 
     mc "What is this place..."
+
+
+# Show random splash art on startup
+label splashscreen:
+    scene black
+    with Pause(1)
+
+    play sound "arrr.wav"
+
+    $ renpy.show('splash')
+    with dissolve
+    with Pause(2)
+
+    scene black with dissolve
+    with Pause(1)
+
+    return
